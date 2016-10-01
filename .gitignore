@@ -3,6 +3,14 @@
 *.a
 *.so
 
+# Builded binaries
+SimpleCrudServer/server
+
+# Idea Ide
+.idea
+*.iml
+
+
 # Folders
 _obj
 _test
