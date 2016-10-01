@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mediocregopher/radix.v2/redis"
 	"syscall"
+	"os"
 )
 
 type Person struct {
@@ -143,7 +144,7 @@ func httpDeletePerson(c *gin.Context, redis *redis.Client) {
 }
 
 func main() {
-	redis, err := redis.Dial("tcp", "localhost:6379")
+	redis, err := redis.Dial("tcp", obtainRedisUrl())
 	if err != nil {
 		fmt.Print(err.Error())
 		syscall.Exit(1)
@@ -167,5 +168,19 @@ func main() {
 	// Delete resources
 	router.DELETE("/person/:id", func(c *gin.Context) {httpDeletePerson(c, redis)})
 	router.Run(":3000")
+}
+
+func obtainRedisUrl() string {
+	redisIp := os.Getenv("REDIS_IP")
+	redisPort := os.Getenv("REDIS_PORT")
+
+	if len(redisIp) == 0 {
+		redisIp = "localhost"
+	}
+	if len(redisPort) == 0 {
+		redisPort="6379"
+	}
+
+	return redisIp + ":" + redisPort
 }
 
