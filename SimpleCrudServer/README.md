@@ -1,11 +1,10 @@
 
-# Run SimpleCrudServer in Docker
+# Build and Run SimpleCrudServer in Local Docker
 
 Run Redis
 ```
 docker run -p 6379:6379 --name redis -d redis
 ```
-
 
 Obtain IPAddress value of redis docker container: docker inspect redis
 ```
