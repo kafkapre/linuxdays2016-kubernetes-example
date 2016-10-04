@@ -17,26 +17,13 @@ spec:
       containers:
         - name: server
           image: kafkapre/linuxdays2016-simple-crud-server:latest
+          env:
+            - name: REDIS_IP
+              value: "redis"
+            - name: REDIS_PORT
+              value: "6379"
           ports:
             - name: server-port
               containerPort: 3000
+              hostPort: 80
 
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: server
-  labels:
-    app: crud-server
-    component: server
-spec:
-  #type: ClusterIP
-  selector:
-    app: crud-server
-    component: server
-  ports:
-    - port: 80
-      targetPort: 3000
-      protocol: TCP
-      name: server-port
