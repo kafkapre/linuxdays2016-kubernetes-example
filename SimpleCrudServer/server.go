@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mediocregopher/radix.v2/redis"
@@ -144,9 +145,9 @@ func httpDeletePerson(c *gin.Context, redis *redis.Client) {
 }
 
 func main() {
-	redis, err := redis.Dial("tcp", obtainRedisUrl())
-	if err != nil {
-		fmt.Print(err.Error())
+	redis := connectToRedis()
+	if redis == nil {
+		fmt.Println("Attempts to connect to redis faild. Server will be stoped")
 		syscall.Exit(1)
 	}
 
@@ -170,6 +171,20 @@ func main() {
 	router.Run(":3000")
 }
 
+func connectToRedis()  (*redis.Client){
+		url:=obtainRedisUrl()
+		for i:=0; i < 20; i++ {
+				redisClient, err := redis.Dial("tcp", url)
+				if err == nil {
+						fmt.Println("Connected to redis.")
+						return redisClient
+				}
+				fmt.Printf("Tried to connect to redis [attempt: %d].\n", i)
+				time.Sleep(5 * time.Second)
+		}
+		return nil
+}
+
 func obtainRedisUrl() string {
 	redisIp := os.Getenv("REDIS_IP")
 	redisPort := os.Getenv("REDIS_PORT")
@@ -183,4 +198,3 @@ func obtainRedisUrl() string {
 
 	return redisIp + ":" + redisPort
 }
-
