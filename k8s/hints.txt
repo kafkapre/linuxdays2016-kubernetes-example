@@ -1,0 +1,17 @@
+export MINIKUBE_IP=`minikube ip`
+
+curl $MINIKUBE_IP:80/persons
+
+curl -H "Content-Type: application/json" -X POST -d '{"id":"1", "name": "Jan", "surname": "Novak"}' $MINIKUBE_IP:80/person
+
+kubectl --namespace linuxdays scale --replicas=2 rc server
+
+kubectl --namespace linuxdays describe pod  server-5svez 
+
+kubectl --namespace linuxdays scale --replicas=2 rc server
+
+eval $(minikube docker-env)
+
+
+curl $MINIKUBE_IP:30061/persons
+

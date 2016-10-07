@@ -11,5 +11,20 @@ sed -e "s/%namespaceName%/$namespace/" $currentDir/namespace.yaml | kubectl crea
 echo "Starting redis instance ..."
 kubectl --namespace=$namespace create -f $currentDir/redis.yaml
 
-echo "Starting SimpleCrudServer instance ..."
-kubectl --namespace=$namespace create -f $currentDir/simpleCrudServer.yaml
+
+
+
+case "$1" in
+-s )
+   echo "Starting SimpleCrudServer instance with service..."
+   kubectl --namespace=$namespace create -f $currentDir/simpleCrudServer-with-service.yaml
+   ;;
+* )
+   echo "Starting SimpleCrudServer instance without service..."
+   kubectl --namespace=$namespace create -f $currentDir/simpleCrudServer.yaml
+   ;;
+esac
+
+
+#echo "Starting SimpleCrudServer instance ..."
+#kubectl --namespace=$namespace create -f $currentDir/simpleCrudServer-with-service.yaml
