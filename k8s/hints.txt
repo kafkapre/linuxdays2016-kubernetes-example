@@ -15,3 +15,4 @@ eval $(minikube docker-env)
 
 curl $MINIKUBE_IP:30061/persons
 
+kubectl --all-namespaces=true get pods  
